@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EVA Points & Payout Calculator</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f4f6f9; padding: 20px; }
+  .container { max-width: 800px; margin: auto; background: #fff; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+  h2 { text-align: center; color: #5a287d; margin-top: 0; }
+  .section-title { background: #5a287d; color: #fff; padding: 8px 12px; font-weight: bold; border-radius: 4px; margin-top: 20px; margin-bottom: 10px; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { padding: 10px; text-align: left; border-bottom: 1px solid #e0e0e0; }
+  th { color: #555; font-size: 14px; }
+  .points-badge { display: inline-block; padding: 3px 8px; border-radius: 4px; font-weight: bold; font-size: 13px; }
+  .pos { background: #e6f9ed; color: #1e7e34; }
+  .neg { background: #fde8e8; color: #d92525; }
+  .manual { background: #e8f0fe; color: #1a73e8; }
+  input[type="number"] { width: 90px; padding: 6px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; text-align: center; }
+  .input-currency { width: 120px !important; text-align: right !important; }
+  .subtotal { font-size: 14px; color: #666; font-weight: 500; }
+  
+  .summary-panel {
+    background: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 15px 20px;
+    margin-top: 25px;
+  }
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px dashed #ddd;
+    font-size: 15px;
+    color: #333;
+  }
+  .summary-row:last-child {
+    border-bottom: none;
+  }
+  .highlight-value {
+    font-weight: bold;
+    color: #5a287d;
+  }
+  .total-card {
+    background: #5a287d;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  .btn-reset {
+    display: block;
+    width: 100%;
+    margin-top: 15px;
+    padding: 12px;
+    background: #e2e8f0;
+    color: #333;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-reset:hover {
+    background: #cbd5e1;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h2>EVA Points & Payout Calculator</h2>
+
+  <div class="section-title">Deployment</div>
+  <table>
+    <thead><tr><th>KPI Parameter</th><th>EVA Points</th><th>Achievement (Count)</th><th>Total</th></tr></thead>
+    <tbody>
+      <tr><td>>=3499 Dep (Non OMC, Non-Lead)</td><td><span class="points-badge pos">+18</span></td><td><input type="number" min="0" value="0" data-eva="18" class="eva-input" oninput="calculateTotal()"></td><td class="subtotal">0</td></tr>
+      <tr><td>Preferred Deployment (Non OMC, Non Lead)</td><td><span class="points-badge pos">+15</span></td><td><input type="number" min="0" value="0" data-eva="15" class="eva-input" oninput="calculateTotal()"></td><td class="subtotal">0</td></tr>
+      <tr><td>OMC / Other Base Dep (Non Lead)</td><td><span class="points-badge pos">+10</span></td><td><input type="number" min="0" value="0" data-eva="10" class="eva-input" oninput="calculateTotal()"></td><td class="subtotal">0</td></tr>
+      <tr><td>Deployment on Leads (High Conversion Only)</td><td><span class="points-badge pos">+10</span></td><td><input type="number" min="0" value="0" data-eva="10" class="eva-input" oninput="calculateTotal()"></td><td class="subtotal">0</td></tr>
+      <tr><td>High Conversion Leads Actioning</td><td><span class="points-badge pos">+3</span></td><td><input type="number" min="0" value="0" data-eva="3" class="eva-input" oninput="calculateTotal()"></td><td class="subtotal">0</td></tr>
+      <tr><td>Dep with 1L M0 TPV</td><td><span class="points-badge pos">+3</span></td><td><input type="number" min="0" value="0" data-eva="3" class="eva-input" oninput="calculateTotal()"></td><td class="subtotal">0</td></tr>
+      <tr><td>Dep with 2L M0 TPV</td><td><span class="points-badge pos">+6</span></td><td><input type="number" min="0" value="0" data-eva="6" class="eva-input" oninput="calculateTotal()"></td><td class="subtotal">0</td></tr>
+      <tr><td>SS Deployment on Festive Special Base</td><td><span class="points-badge pos">+2</span></td><td><input type="number" min="0" value="0" data-eva="2" class="eva-input" oninput="calculateTotal()"></td><td class="subtotal">0</td></tr>
+    </tbody>
+  </table>
+
+  <div class="section-title">Acquisition</div>
+  <table>
+    <thead><tr><th>KPI Parameter</th><th>EVA Points</th><th>Achievement (Count)</th><th>Total</th></tr></thead>
+    <tbody>
+      <tr><td>Premium Acq (Individual)</td><td><span class="points-badge pos">+3</span></td><td><input type="number" min="0" value="0" data-eva="3" class="eva-input" oninput="calculateTotal()"></td><td class="subtotal">0</td></tr>
+      <tr><td>Premium Acq (Non-Individual)</td><td><span class="points-badge pos">+8</span></td><td><input type="number" min="0" value="0" data-eva="8" class="eva-input" oninput="calculateTotal()"></td><td class="subtotal">0</td></tr>
+    </tbody>
+  </table>
+
+  <div class="section-title">Base Management</div>
+  <table>
+    <thead><tr><th>KPI Parameter</th><th>EVA Points</th><th>Achievement (Count)</th><th>Total</th></tr></thead>
+    <tbody>
+      <tr><td>M1 >= 50K</td><td><span class="points-badge pos">+2</span></td><td><input type="number" min="0" value="0" data-eva="2" class="eva-input" oninput="calculateTotal()"></td><td class="subtotal">0</td></tr>
+      <tr><td>M1 &lt; 50K</td><td><span class="points-badge neg">-2</span></td><td><input type="number" min="0" value="0" data-eva="-2" class="eva-input" oninput="calculateTotal()"></td><td class="subtotal">0</td></tr>
+      <tr><td>50K Net Adds (Positive)</td><td><span class="points-badge pos">+2</span></td><td><input type="number" min="0" value="0" data-eva="2" class="eva-input" oninput="calculateTotal()"></td><td class="subtotal">0</td></tr>
+      <tr><td>50K Net Adds (Negative)</td><td><span class="points-badge neg">-2</span></td><td><input type="number" min="0" value="0" data-eva="-2" class="eva-input" oninput="calculateTotal()"></td><td class="subtotal">0</td></tr>
+      <tr><td>Droppers Actioned to Growth</td><td><span class="points-badge pos">+3</span></td><td><input type="number" min="0" value="0" data-eva="3" class="eva-input" oninput="calculateTotal()"></td><td class="subtotal">0</td></tr>
+    </tbody>
+  </table>
+
+  <div class="section-title">Re-KYC</div>
+  <table>
+    <thead><tr><th>KPI Parameter</th><th>EVA Points</th><th>Achievement (Count)</th><th>Total</th></tr></thead>
+    <tbody>
+      <tr><td>Re-KYC (Individual, excl. M0 Dep)</td><td><span class="points-badge pos">+2</span></td><td><input type="number" min="0" value="0" data-eva="2" class="eva-input" oninput="calculateTotal()"></td><td class="subtotal">0</td></tr>
+      <tr><td>&lt;10L - ReKYC (Non Individual, excl. M0 Dep)</td><td><span class="points-badge pos">+5</span></td><td><input type="number" min="0" value="0" data-eva="5" class="eva-input" oninput="calculateTotal()"></td><td class="subtotal">0</td></tr>
+      <tr><td>&gt;10L - ReKYC (Non Individual, excl. M0 Dep)</td><td><span class="points-badge pos">+8</span></td><td><input type="number" min="0" value="0" data-eva="8" class="eva-input" oninput="calculateTotal()"></td><td class="subtotal">0</td></tr>
+    </tbody>
+  </table>
+
+  <div class="section-title">Manual Adjustments (Blind Days / Holidays)</div>
+  <table>
+    <thead><tr><th>Parameter</th><th>Type</th><th>EVA Points Count</th><th>Total</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Blind Day EVA Count</td>
+        <td><span class="points-badge manual">Manual</span></td>
+        <td><input type="number" value="0" id="blindDayCount" oninput="calculateTotal()"></td>
+        <td class="subtotal" id="blindDaySubtotal">0</td>
+      </tr>
+      <tr>
+        <td>Holidays EVA Count</td>
+        <td><span class="points-badge manual">Manual</span></td>
+        <td><input type="number" value="0" id="holidayCount" oninput="calculateTotal()"></td>
+        <td class="subtotal" id="holidaySubtotal">0</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-title">Part B Incentive</div>
+  <table>
+    <thead><tr><th>Parameter</th><th>Type</th><th>Amount (₹)</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Part B Manual Amount</td>
+        <td><span class="points-badge manual">Manual ₹</span></td>
+        <td><input type="number" min="0" step="any" value="0" id="partBAmount" class="input-currency" oninput="calculateTotal()"></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="summary-panel">
+    <div class="summary-row">
+      <span>Total EVA Points:</span>
+      <span class="highlight-value" id="grandTotalPoints">0</span>
+    </div>
+    <div class="summary-row">
+      <span>EVA Amount (Total Points × ₹82):</span>
+      <span class="highlight-value" id="evaAmount">₹0.00</span>
+    </div>
+    <div class="summary-row">
+      <span>Part B Amount:</span>
+      <span class="highlight-value" id="partBDisplay">₹0.00</span>
+    </div>
+    
+    <div class="total-card">
+      <span>Final Total Payout:</span>
+      <span id="finalPayout">₹0.00</span>
+    </div>
+  </div>
+
+  <button type="button" class="btn-reset" onclick="resetCalculator()">Reset All Entries</button>
+</div>
+
+<script>
+function calculateTotal() {
+  let tablePoints = 0;
+  
+  // 1. Calculate KPI Table Points
+  const kpiInputs = document.querySelectorAll('.eva-input');
+  kpiInputs.forEach(input => {
+    const eva = parseFloat(input.getAttribute('data-eva')) || 0;
+    const count = parseFloat(input.value) || 0;
+    const rowTotal = eva * count;
+    input.closest('tr').querySelector('.subtotal').textContent = rowTotal;
+    tablePoints += rowTotal;
+  });
+
+  // 2. Add Manual Blind Days & Holidays Points
+  const blindDays = parseFloat(document.getElementById('blindDayCount').value) || 0;
+  const holidays = parseFloat(document.getElementById('holidayCount').value) || 0;
+  
+  document.getElementById('blindDaySubtotal').textContent = blindDays;
+  document.getElementById('holidaySubtotal').textContent = holidays;
+
+  const totalPoints = tablePoints + blindDays + holidays;
+  document.getElementById('grandTotalPoints').textContent = totalPoints;
+
+  // 3. Calculate EVA Amount (₹82 per point)
+  const evaRate = 82;
+  const totalEvaEarnings = totalPoints * evaRate;
+  document.getElementById('evaAmount').textContent = '₹' + totalEvaEarnings.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+  // 4. Calculate Part B & Final Total
+  const partBAmount = parseFloat(document.getElementById('partBAmount').value) || 0;
+  document.getElementById('partBDisplay').textContent = '₹' + partBAmount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+  const grandTotalPayout = totalEvaEarnings + partBAmount;
+  document.getElementById('finalPayout').textContent = '₹' + grandTotalPayout.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function resetCalculator() {
+  const allInputs = document.querySelectorAll('input[type="number"]');
+  allInputs.forEach(input => {
+    input.value = 0;
+  });
+  calculateTotal();
+}
+</script>
+
+</body>
+</html>
